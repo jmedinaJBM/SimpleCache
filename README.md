@@ -34,7 +34,7 @@ public class MapCache<K,T> {
     }
 }
 ```
-<br/><br/>La variable **keyMapper** es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En la sección de código puede verse este método; también se puede establecer con uno de los constructores de la clase.
+<br/>La variable **keyMapper** es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En la sección de código puede verse este método; también se puede establecer con uno de los constructores de la clase.
 ```java
 public Function<T,K>    getKeyMapper(){
     return(this.keyMapper.orElse(null));
@@ -44,7 +44,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
     this.keyMapper = Optional.ofNullable(keyMapper);
 }
 ```
-
+<br/><br/>
 ### Los Métodos get
 Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **get(K key)** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **get(Predicate\<T> filter)**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **getOrDefault(K key, T defaultValue)** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
@@ -113,5 +113,26 @@ public T        put(K key, T value){
 public T        put(Supplier<T> valueSupplier){
     T value = valueSupplier.get();
     return(this.mapCache.put(this.getKey(value), value));
+}
+```
+<br/> Lo métodos **put(T value, Consumer\<T> action)**, **put(K key, T value, BiConsumer<K,T> action)** y  **put(Supplier\<T> valueSupplier, Consumer\<T> action)** son similares a los anteriores, pero con la variante de que al agregar el *valor* a la caché, ejecuta un acción proporcionada por el **Consumer\<T> action** o el **BiConsumer\<T> action**.
+```java
+public T        put(T value, Consumer<T> action){
+    this.mapCache.put(this.getKey(value), value);
+    action.accept(value);
+    return(value);
+}
+
+public T        put(K key, T value, BiConsumer<K,T> action){
+    this.mapCache.put(key, value);
+    action.accept(key, value);
+    return(value);
+}
+
+public T        put(Supplier<T> valueSupplier, Consumer<T> action){
+    T value = valueSupplier.get();
+    this.mapCache.put(this.getKey(value), value);
+    action.accept(value);
+    return(value);
 }
 ```
