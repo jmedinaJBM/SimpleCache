@@ -9,3 +9,8 @@ En Java Enterprise Edition, (**JavaEE**) existe el paquete [javax.cache](https:/
 ## Ejemplo con Java
 En este caso tenemos un ejemplo básico de los conceptos de una caché implementada con una clase que contiene un [Map<K,V>](https://docs.oracle.com/javase/8/docs/api/java/util/Map.html) donde se guardan los valores. La clase la he llamado **MapCache** y tiene dos parámetros genéricos **K** y **V** donde *K* representa el tipo de objeto a utilizar como *Key*, *V* representa el tipo de objeto a utilizar como *valor*. Para los que no conocen la interface **java.util.Map**, esta representa algo así como una tabla, donde cada entrada está identificada por una clave (**K** o key) y que tiene asociado un único valor (**V**) de manera que se puede acceder de forma directa a un valor, conociendo su correspondiente clave (*K*). <br/>
 ![alt text](https://github.com/jmedinaJBM/SimpleCache/blob/master/Tabla_MAP.png)
+
+### Requisitos del Proyecto Java
+1. [NetBeans 8.2](https://netbeans.org/downloads/)
+2. [Java SE JDK 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html?fbclid=IwAR21GQMtgfZY7ZzLscX538bwGPkzqT8ap2jXCFUy0Ycnmxqy4hEDja7XPJo) update más reciente.
+3. [Apache Maven 3.6](https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip?fbclid=IwAR2pO8S7v5Frm0eKYDoTemFWSu7w0fIYOIXsDrmrthNlUKGHQbF6uN5TkoM)
