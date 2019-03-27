@@ -137,7 +137,7 @@ public T        put(Supplier<T> valueSupplier, Consumer<T> action){
 }
 ```
 <br/> El método **putAll(List\<T> valueList)** agrega a la caché todos los valores dados en *valueList*. **putAll(List\<T> valueList, Consumer\<T> action)** hace lo mismo con la variante que ejecuta el consumer *action* para cada valor agregado a la caché, como lo haría un *writer*, que se ocupa de escribir en una base de datos cada valor agregado a la caché.
-``java
+```java
 public void     putAll(List<T> valueList){
     for(T value: valueList){
         this.mapCache.put(this.getKey(value), value);
@@ -150,4 +150,4 @@ public void     putAll(List<T> valueList, Consumer<T> action){
         action.accept(value);
     }
 }
-``
+```
