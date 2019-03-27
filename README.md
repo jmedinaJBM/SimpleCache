@@ -62,7 +62,7 @@ public T        getOrDefault(K key, T defaultValue){
     return(this.mapCache.getOrDefault(key, defaultValue));
 }
 ```
-<br/><br/> El método **getOrElse(K key, Function<K,T> valueMapper)** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **getOrElse(Predicate\<T> filter, Supplier\<T> valueSupplier)** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
+<br/>El método **getOrElse(K key, Function<K,T> valueMapper)** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **getOrElse(Predicate\<T> filter, Supplier\<T> valueSupplier)** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
 ```java
 public T        getOrElse(K key, Function<K,T> valueMapper){
     Optional<T> value = Optional.ofNullable(this.mapCache.get(key));
@@ -84,5 +84,34 @@ public T        getOrElse(Predicate<T> filter, Supplier<T> valueSupplier){
         }
         return(val);
     }));
+}
+```
+<br/>Los métodos **getOrElseThrow**, son similar a los *getOrElse*, pero en lugar de usar un *valueMapper* o un *valueSupplier*, lanzan un exception.
+```java
+public  <X extends Throwable> T getOrElseThrow(Predicate<T> filter, Supplier<? extends X> exceptionSupplier ) throws X{
+    Optional<T> value = this.getByFilter(filter);
+    return(value.<X>orElseThrow(exceptionSupplier)); 
+}
+
+public <X extends Throwable> T getOrElseThrow(K key, Supplier<? extends X> exceptionSupplier ) throws X{
+    Optional<T> value = Optional.ofNullable(this.mapCache.get(key));
+    return(value.<X>orElseThrow(exceptionSupplier)); 
+}
+```
+<br/><br/>
+### Los Métodos put
+Estos métodos agregan valores a la caché. **put(T value)** agrega *value* a la caché y el *key* es calculado con el *keyMapper* que se ha definido antes. **put(K key, T value)** agrega a la caché el valor dado en *value* con el correspondiente *key* proporcionado. **put(Supplier\<T> valueSupplier>)** agrega el valor que proporciona *valueSupplier*.
+```java
+public T        put(T value){
+    return(this.mapCache.put(this.getKey(value), value));
+}
+
+public T        put(K key, T value){
+    return(this.mapCache.put(key, value));
+}
+
+public T        put(Supplier<T> valueSupplier){
+    T value = valueSupplier.get();
+    return(this.mapCache.put(this.getKey(value), value));
 }
 ```
