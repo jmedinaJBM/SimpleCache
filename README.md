@@ -15,7 +15,7 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 2. [Java SE JDK 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html?fbclid=IwAR21GQMtgfZY7ZzLscX538bwGPkzqT8ap2jXCFUy0Ycnmxqy4hEDja7XPJo) update más reciente.
 3. [Apache Maven 3.6](https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip?fbclid=IwAR2pO8S7v5Frm0eKYDoTemFWSu7w0fIYOIXsDrmrthNlUKGHQbF6uN5TkoM)
 
-* **Definición de la Clase MapCache<K,V>**
+### Definición de la Clase MapCache<K,V>**
 La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
 Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente, utilizado como Caché, donde se guardan los valores de tipo **T** con sus correspondiente *key (**K**).
 ```java
@@ -60,5 +60,29 @@ public T        get(Predicate<T> filter){
 ```java
 public T        getOrDefault(K key, T defaultValue){
     return(this.mapCache.getOrDefault(key, defaultValue));
+}
+```
+<br/><br/> El método **getOrElse(K key, Function<K,T> valueMapper)** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **getOrElse(Predicate\<T> filter, Supplier\<T> valueSupplier)** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
+```java
+public T        getOrElse(K key, Function<K,T> valueMapper){
+    Optional<T> value = Optional.ofNullable(this.mapCache.get(key));
+    return(value.orElseGet(() -> {
+        T val = valueMapper.apply(key);
+        if(val!=null){
+            this.mapCache.putIfAbsent(key, val);
+        }
+        return(val);
+    }));
+}
+
+public T        getOrElse(Predicate<T> filter, Supplier<T> valueSupplier){
+    Optional<T> value = this.getByFilter(filter);
+    return(value.orElseGet(() -> {
+        T val = valueSupplier.get();
+        if(val!=null){
+            this.mapCache.putIfAbsent(this.getKey(val), val);
+        }
+        return(val);
+    }));
 }
 ```
