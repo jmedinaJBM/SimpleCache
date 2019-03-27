@@ -17,42 +17,24 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 
 ### Definición de la Clase MapCache<K,V>
 La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
-Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente y la variable keyMapper es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En la sección de código puede verse este método; también se puede establecer con uno de los constructores de la clase.
-
+Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente, utilizado como Caché, donde se guardan los valores de tipo **T** con sus correspondiente *key (**K**).
 ```java
-/**
- * Una implementación simple de una Caché utilizando un {@link java.util.Map}. <br>
- * Este Map es Thread safety.
- * @author Jairo Medina
- * @param <K> Es el Tipo de objeto utilizado para los key en el {@code Map}.
- * @param <T> Tipo de objeto a manejar en el {@code MapCache}.
- * @since 1.0
- */
 public class MapCache<K,T> {
     private static final String     KEYMAPPER_NOPRESENT = "KeyMapper no definido.";
     
     private ConcurrentHashMap<K,T>  mapCache;
-    
     private Optional<Function<T,K>> keyMapper;
     
-    
-    //---Constructores---
-    /**
-     * Crea una instancia de esta clase.
-     */
     public MapCache(){
         this.initialize(null);
     }
     
-    /**
-     * Crea una instancia de esta clase con el {@code keyMapper}.
-     * @param keyMapper Un mapper que devuelve el {@code key} del valor dado de tipo {@code T}.
-     */
     public MapCache(Function<T,K> keyMapper){
         this.initialize(keyMapper);
     }
 }
 ```
+<br/><br/>La variable **keyMapper** es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En la sección de código puede verse este método; también se puede establecer con uno de los constructores de la clase.
 ```java
 public Function<T,K>    getKeyMapper(){
     return(this.keyMapper.orElse(null));
@@ -63,7 +45,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 }
 ```
 
-### Los Métodos get
+#### Los Métodos get
 Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **get(K key)** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **get(Predicate\<T> filter)**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **getOrDefault(K key, T defaultValue)** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
