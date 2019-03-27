@@ -45,7 +45,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 }
 ```
 
-#### Los Métodos get
+### Los Métodos get
 Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **get(K key)** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **get(Predicate\<T> filter)**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **getOrDefault(K key, T defaultValue)** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
