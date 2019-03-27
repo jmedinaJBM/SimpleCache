@@ -16,4 +16,41 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 3. [Apache Maven 3.6](https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip?fbclid=IwAR2pO8S7v5Frm0eKYDoTemFWSu7w0fIYOIXsDrmrthNlUKGHQbF6uN5TkoM)
 
 ### Definición de la Clase MapCache<K,V>
-La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.
+La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
+Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente y la variable keyMapper es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En el código puede verse este método; también se puede establecer con uno de los constructores de la clase.
+
+```java
+/**
+ * Una implementación simple de una Caché utilizando un {@link java.util.Map}. <br>
+ * Este Map es Thread safety.
+ * @author Jairo Medina
+ * @param <K> Es el Tipo de objeto utilizado para los key en el {@code Map}.
+ * @param <T> Tipo de objeto a manejar en el {@code MapCache}.
+ * @since 1.0
+ */
+public class MapCache<K,T> {
+    private static final String     KEYMAPPER_NOPRESENT = "KeyMapper no definido.";
+    
+    private ConcurrentHashMap<K,T>  mapCache;
+    
+    private Optional<Function<T,K>> keyMapper;
+    
+    
+    //---Constructores---
+    //******************************************************************************************************************
+    /**
+     * Crea una instancia de esta clase.
+     */
+    public MapCache(){
+        this.initialize(null);
+    }
+    
+    /**
+     * Crea una instancia de esta clase con el {@code keyMapper}.
+     * @param keyMapper Un mapper que devuelve el {@code key} del valor dado de tipo {@code T}.
+     */
+    public MapCache(Function<T,K> keyMapper){
+        this.initialize(keyMapper);
+    }
+}
+```
