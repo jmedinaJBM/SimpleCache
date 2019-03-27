@@ -17,7 +17,7 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 
 ### Definición de la Clase MapCache<K,V>
 La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
-Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente y la variable keyMapper es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En el código puede verse este método; también se puede establecer con uno de los constructores de la clase.
+Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente y la variable keyMapper es un [Function<T,K>](https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html) que se ocupa de obtener el *Key* (**K**) de un valor  (**T**). El **keyMapper** es una propiedad de la clase y este debe ser definido con el método **setKeyMapper**. En la sección de código puede verse este método; también se puede establecer con uno de los constructores de la clase.
 
 ```java
 /**
@@ -37,7 +37,6 @@ public class MapCache<K,T> {
     
     
     //---Constructores---
-    //******************************************************************************************************************
     /**
      * Crea una instancia de esta clase.
      */
@@ -54,3 +53,24 @@ public class MapCache<K,T> {
     }
 }
 ```
+```java
+/**
+     * Devuelve el {@code keyMapper} establecido. <br>Este mapper, calcula la clave a utilizar en el {@link java.util.Map}
+     * para cada valor.
+     * @return El mapper que calcula la clave de cada objeto en esta caché.
+     */
+    public Function<T,K>    getKeyMapper(){
+        return(this.keyMapper.orElse(null));
+    }
+    
+    /**
+     * Establece el {@code keyMapper} a utilizar.
+     * @param keyMapper Mapper que calcula la clave de cada objeto en esta caché.
+     */
+    public void             setKeyMapper(Function<T,K> keyMapper){
+        this.keyMapper = Optional.ofNullable(keyMapper);
+    }
+```
+
+### Los Métodos get
+Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **get(K key)** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **get(Predicate\<T> filter)**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **getOrDefault(K key, T defaultValue)** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
