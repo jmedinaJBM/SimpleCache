@@ -14,3 +14,6 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 1. [NetBeans 8.2](https://netbeans.org/downloads/)
 2. [Java SE JDK 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html?fbclid=IwAR21GQMtgfZY7ZzLscX538bwGPkzqT8ap2jXCFUy0Ycnmxqy4hEDja7XPJo) update más reciente.
 3. [Apache Maven 3.6](https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip?fbclid=IwAR2pO8S7v5Frm0eKYDoTemFWSu7w0fIYOIXsDrmrthNlUKGHQbF6uN5TkoM)
+
+## Definición de la Clase MapCache<K,V>
+La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  `public class MapCache<K,T>` He usado **T** en lugar de *V*, pero da igual, no pasa nada.
