@@ -46,7 +46,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 ```
 <br/><br/>
 ### Los Métodos get
-Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **get(K key)** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **get(Predicate\<T> filter)**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **getOrDefault(K key, T defaultValue)** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
+Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **`get(K key)`** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **`get(Predicate\<T> filter)`**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **`getOrDefault(K key, T defaultValue)`** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
 public T        get(K key){
@@ -62,7 +62,7 @@ public T        getOrDefault(K key, T defaultValue){
     return(this.mapCache.getOrDefault(key, defaultValue));
 }
 ```
-<br/>El método **getOrElse(K key, Function<K,T> valueMapper)** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **getOrElse(Predicate\<T> filter, Supplier\<T> valueSupplier)** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
+<br/>El método **`getOrElse(K key, Function<K,T> valueMapper)`** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **`getOrElse(Predicate\<T> filter, Supplier\<T> valueSupplier)`** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
 ```java
 public T        getOrElse(K key, Function<K,T> valueMapper){
     Optional<T> value = Optional.ofNullable(this.mapCache.get(key));
@@ -100,7 +100,7 @@ public <X extends Throwable> T getOrElseThrow(K key, Supplier<? extends X> excep
 ```
 <br/><br/>
 ### Los Métodos put
-Estos métodos agregan valores a la caché. **put(T value)** agrega *value* a la caché y el *key* es calculado con el *keyMapper* que se ha definido antes. **put(K key, T value)** agrega a la caché el valor dado en *value* con el correspondiente *key* proporcionado. **put(Supplier\<T> valueSupplier>)** agrega el valor que proporciona *valueSupplier*.
+Estos métodos agregan valores a la caché. **`put(T value)`** agrega *value* a la caché y el *key* es calculado con el *keyMapper* que se ha definido antes. **`put(K key, T value)`** agrega a la caché el valor dado en *value* con el correspondiente *key* proporcionado. **`put(Supplier\<T> valueSupplier>)`** agrega el valor que proporciona *valueSupplier*.
 ```java
 public T        put(T value){
     return(this.mapCache.put(this.getKey(value), value));
@@ -115,7 +115,7 @@ public T        put(Supplier<T> valueSupplier){
     return(this.mapCache.put(this.getKey(value), value));
 }
 ```
-<br/> Lo métodos **put(T value, Consumer\<T> action)**, **put(K key, T value, BiConsumer<K,T> action)** y  **put(Supplier\<T> valueSupplier, Consumer\<T> action)** son similares a los anteriores, pero con la variante de que al agregar el *valor* a la caché, ejecuta un acción proporcionada por el **Consumer\<T> action** o el **BiConsumer\<T> action**.
+<br/> Lo métodos **`put(T value, Consumer\<T> action)`**, **`put(K key, T value, BiConsumer<K,T> action)`** y  **`put(Supplier\<T> valueSupplier, Consumer\<T> action)`** son similares a los anteriores, pero con la variante de que al agregar el *valor* a la caché, ejecuta un acción proporcionada por el **Consumer\<T> action** o el **BiConsumer\<T> action**.
 ```java
 public T        put(T value, Consumer<T> action){
     this.mapCache.put(this.getKey(value), value);
@@ -136,7 +136,7 @@ public T        put(Supplier<T> valueSupplier, Consumer<T> action){
     return(value);
 }
 ```
-<br/> El método **putAll(List\<T> valueList)** agrega a la caché todos los valores dados en *valueList*. **putAll(List\<T> valueList, Consumer\<T> action)** hace lo mismo con la variante que ejecuta el consumer *action* para cada valor agregado a la caché, como lo haría un *writer*, que se ocupa de escribir en una base de datos cada valor agregado a la caché.
+<br/> El método **`putAll(List\<T> valueList)`** agrega a la caché todos los valores dados en *valueList*. **`putAll(List\<T> valueList, Consumer\<T> action)`** hace lo mismo con la variante que ejecuta el consumer *action* para cada valor agregado a la caché, como lo haría un *writer*, que se ocupa de escribir en una base de datos cada valor agregado a la caché.
 ```java
 public void     putAll(List<T> valueList){
     for(T value: valueList){
