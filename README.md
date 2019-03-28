@@ -45,7 +45,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 }
 ```
 
-## Los Métodos get
+## Métodos get
 Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **`get(K key)`** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **`get(Predicate\<T> filter)`**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **`getOrDefault(K key, T defaultValue)`** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
@@ -99,7 +99,7 @@ public <X extends Throwable> T getOrElseThrow(K key, Supplier<? extends X> excep
 }
 ```
 
-## Los Métodos put
+## Métodos put
 Estos métodos agregan valores a la caché. **`put(T value)`** agrega *value* a la caché y el *key* es calculado con el *keyMapper* que se ha definido antes. **`put(K key, T value)`** agrega a la caché el valor dado en *value* con el correspondiente *key* proporcionado. **`put(Supplier\<T> valueSupplier>)`** agrega el valor que proporciona *valueSupplier*.
 ```java
 public T        put(T value){
@@ -152,7 +152,7 @@ public void     putAll(List<T> valueList, Consumer<T> action){
 }
 ```
 
-## Los Métodos remove
+## Métodos remove
 Estos métodos se ocupan de eliminar valores de la caché.  **`remove(K key)`** elimina de la caché el valor asociado al *key*. **`removeIf(Predicate\<T> filter)`** elimina de la caché los valores que cumplan con la condición dada en *filter*. **`removeIfPresent(T value)`** elimina de la caché el valor dado en *value* si existe en la caché una entrada con el mismo *key* y el mismo *value*; el *key* es calculado con el *keyMapper*.
 ```java
 public T        remove(K key){
