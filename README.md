@@ -17,7 +17,7 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 
 ## Definición de la Clase MapCache<K,V>**
 La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
-Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente, utilizado como Caché, donde se guardan los valores de tipo **T** con sus correspondiente *key (**K**).
+Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente, utilizado como Caché, donde se guardan los valores de tipo **T** con sus correspondiente *key* (**K**).
 ```java
 public class MapCache<K,T> {
     private static final String     KEYMAPPER_NOPRESENT = "KeyMapper no definido.";
@@ -46,7 +46,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 ```
 
 ## Métodos get
-Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, <br/>**`get(K key)`** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **`get(Predicate<T> filter)`**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **`getOrDefault(K key, T defaultValue)`** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
+Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, <br/>**`get(K key)`** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **`get(Predicate<T> filter)`**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*.<br/> **`getOrDefault(K key, T defaultValue)`** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
 public T        get(K key){
@@ -62,7 +62,7 @@ public T        getOrDefault(K key, T defaultValue){
     return(this.mapCache.getOrDefault(key, defaultValue));
 }
 ```
-<br/>El método **`getOrElse(K key, Function<K,T> valueMapper)`** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método **`getOrElse(Predicate<T> filter, Supplier<T> valueSupplier)`** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
+<br/>El método **`getOrElse(K key, Function<K,T> valueMapper)`** devuelve el valor asociado con el *key* (**K**) y si no lo encuentra llama a la función **valueMapper** mandando como parámetro el *key*; esta función es equivalente a un *loader* porque puede ser definida para recuperar el valor buscado desde una base de datos. igual pasa con el método <br/>**`getOrElse(Predicate<T> filter, Supplier<T> valueSupplier)`** que si no encuentra un valor que cumpla la condición dada por **filter**, devuelve el valor que proporciona **valueSupplier**, el cual puede ser un loader.
 ```java
 public T        getOrElse(K key, Function<K,T> valueMapper){
     Optional<T> value = Optional.ofNullable(this.mapCache.get(key));
