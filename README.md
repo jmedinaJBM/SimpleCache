@@ -15,7 +15,7 @@ En este caso tenemos un ejemplo básico de los conceptos de una caché implement
 2. [Java SE JDK 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html?fbclid=IwAR21GQMtgfZY7ZzLscX538bwGPkzqT8ap2jXCFUy0Ycnmxqy4hEDja7XPJo) update más reciente.
 3. [Apache Maven 3.6](https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip?fbclid=IwAR2pO8S7v5Frm0eKYDoTemFWSu7w0fIYOIXsDrmrthNlUKGHQbF6uN5TkoM)
 
-### Definición de la Clase MapCache<K,V>**
+## Definición de la Clase MapCache<K,V>**
 La clase **MapCache** está definida con genéricos (**K**,**V**) para que pueda manejar cualquier tipo de objeto como clave (K) y como valor (V).  Primero tenemos la declaración de la clase  **``public class MapCache<K,T>``** He usado **T** en lugar de *V*, pero da igual, no pasa nada.<br/><br/> 
 Seguido tenemos la variable **mapCache** que es un *HashMap* concurrente, utilizado como Caché, donde se guardan los valores de tipo **T** con sus correspondiente *key (**K**).
 ```java
@@ -45,7 +45,7 @@ public void             setKeyMapper(Function<T,K> keyMapper){
 }
 ```
 <br/><br/>
-### Los Métodos get
+## Los Métodos get
 Luego tenemos los métodos **get** y sus variantes: **_getOrDefault_**, **_getOrElse_**, **_getOrElseThrow_**.  Primero los get sencillos, **`get(K key)`** que permite recuperar el valor asociado al *key* (**K**) dado en parámetro; y **`get(Predicate\<T> filter)`**  devuelve el primer valor que encuentre en la caché que cumpla con la condición del *Predicate\<T>*. **`getOrDefault(K key, T defaultValue)`** es similar a *get(K key)* con la diferencia que si no encuentra el valor en la caché, devuelve *defaultValue*.
 ```java
 //---Métodos get sencillos---
@@ -99,7 +99,7 @@ public <X extends Throwable> T getOrElseThrow(K key, Supplier<? extends X> excep
 }
 ```
 <br/><br/>
-### Los Métodos put
+## Los Métodos put
 Estos métodos agregan valores a la caché. **`put(T value)`** agrega *value* a la caché y el *key* es calculado con el *keyMapper* que se ha definido antes. **`put(K key, T value)`** agrega a la caché el valor dado en *value* con el correspondiente *key* proporcionado. **`put(Supplier\<T> valueSupplier>)`** agrega el valor que proporciona *valueSupplier*.
 ```java
 public T        put(T value){
@@ -149,5 +149,25 @@ public void     putAll(List<T> valueList, Consumer<T> action){
         this.mapCache.put(this.getKey(value), value);
         action.accept(value);
     }
+}
+```
+<br/><br/>
+## Los Métodos remove
+Estos métodos se ocupan de eliminar valores de la caché.  **`remove(K key)`** elimina de la caché el valor asociado al *key*. **`removeIf(Predicate\<T> filter)`** elimina de la caché los valores que cumplan con la condición dada en *filter*. **`removeIfPresent(T value)`** elimina de la caché el valor dado en *value* si existe en la caché una entrada con el mismo *key* y el mismo *value*; el *key* es calculado con el *keyMapper*.
+```java
+public T        remove(K key){
+    return(this.mapCache.remove(key));
+}
+
+public List<T>  removeIf(Predicate<T> filter){
+    List<T> valueList = this.getLlistByFilter(filter);
+    for(T value: valueList){
+        this.mapCache.remove(this.getKey(value));
+    }
+    return(valueList);
+}
+
+public boolean  removeIfPresent(T value){
+    return(this.mapCache.remove(this.getKey(value), value));
 }
 ```
