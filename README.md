@@ -1,3 +1,6 @@
+[![][license img]][license]
+<img src="Logo_v4.png" align="right" />
+
 # Simple Caché con Map<K,V>
 
 ## Qué es una Caché?
@@ -177,3 +180,5 @@ public boolean  removeIfPresent(T value){
     return(this.mapCache.remove(this.getKey(value), value));
 }
 ```
+[license img]:https://img.shields.io/badge/License-MIT-green.svg
+[license]:https://github.com/jmedinaJBM/TOTP/blob/master/LICENSE
